@@ -198,7 +198,7 @@ Edit `src/main/resources/application.properties`:
 # Database Configuration
 spring.datasource.url=jdbc:mysql://localhost:3306/al_paper_db
 spring.datasource.username=root
-spring.datasource.password=your_password_here
+spring.datasource.password=""
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 # JPA/Hibernate Configuration
@@ -305,8 +305,8 @@ After first run, you can create admin account or use these test credentials (if 
 ![Student Papers](screenshots/student-papers.png)
 *Clean grid layout for browsing and downloading papers*
 
-### 💬 Support System
-![Support System](screenshots/support.png)
+### 💬 About Us
+![Support System](screenshots/about.png)
 *Integrated help desk for student queries*
 
 > 📝 **Note**: Add actual screenshots to a `screenshots/` folder in your repository root.
