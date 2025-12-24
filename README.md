@@ -189,7 +189,7 @@ cd Advaced-Level-Paper-Management-System-ALPMS-
 #### 2️⃣ Configure MySQL Database
 Create a new database:
 ```sql
-CREATE DATABASE al_paper_db;
+CREATE DATABASE alpapers;
 ```
 
 #### 3️⃣ Update Application Properties
