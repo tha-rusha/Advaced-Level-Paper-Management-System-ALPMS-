@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Support Requests | Admin</title>
+</head>
+<body>
+<h2>All Support Requests</h2>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Student</th>
+        <th>Email</th>
+        <th>Subject</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Change</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${requests}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.fullName}"></td>
+        <td th:text="${r.email}"></td>
+        <td th:text="${r.subject}"></td>
+        <td th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${r.status}"></td>
+        <td>
+            <form th:action="@{'/support/' + ${r.id} + '/status'}" method="post">
+                <select name="status">
+                    <option value="OPEN">OPEN</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="RESOLVED">RESOLVED</option>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

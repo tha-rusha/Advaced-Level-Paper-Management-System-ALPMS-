@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | ALHORIZON</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================================
+           GLOBAL STYLES & RESET
+        =================================== */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 0;
+            background: #f8fafc;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===================================
+           NAVIGATION STYLES (from index.html)
+        =================================== */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(15,23,42,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #0c4a6e, #0369a1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(12,74,110,0.3);
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0c4a6e;
+            line-height: 1;
+            margin-bottom: 0.15rem;
+        }
+
+        .logo-subtitle {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #475569;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0c4a6e, #0369a1);
+            border-radius: 2px;
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #0c4a6e;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0c4a6e, #0369a1);
+            border-radius: 2px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(12,74,110,0.05);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(12,74,110,0.1);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0c4a6e, #0369a1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+
+        .user-role {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .btn-logout {
+            padding: 0.6rem 1.5rem;
+            background: white;
+            color: #0c4a6e;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(12,74,110,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #f1f5f9;
+            transform: scale(1.05);
+        }
+
+        /* ===================================
+           DASHBOARD STYLES
+        =================================== */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #0369a1 100%);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .welcome-badge-text {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #0c4a6e;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .quick-action-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-action-btn.secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: rgba(59,130,246,0.1);
+            color: #3b82f6;
+        }
+
+        .stat-icon.green {
+            background: rgba(16,185,129,0.1);
+            color: #10b981;
+        }
+
+        .stat-icon.orange {
+            background: rgba(249,115,22,0.1);
+            color: #f97316;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-note {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(15,23,42,0.08);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .view-all-link {
+            color: #0c4a6e;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-link:hover {
+            color: #0369a1;
+            transform: translateX(5px);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: #f8fafc;
+        }
+
+        .data-table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-top: 1px solid rgba(15,23,42,0.08);
+            font-size: 0.9rem;
+            color: #0f172a;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16,185,129,0.1);
+            color: #10b981;
+        }
+
+        .badge-warning {
+            background: rgba(245,158,11,0.1);
+            color: #f59e0b;
+        }
+
+        .badge-info {
+            background: rgba(14,165,233,0.1);
+            color: #0ea5e9;
+        }
+
+        /* Subject Chips */
+        .subjects-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .subject-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #0c4a6e, #0369a1);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(12,74,110,0.2);
+        }
+
+        .chip:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(12,74,110,0.3);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(15,23,42,0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -1.55rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0c4a6e;
+            box-shadow: 0 0 0 4px rgba(12,74,110,0.1);
+        }
+
+        .timeline-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-meta {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Footer (from index.html) */
+        footer {
+            background: linear-gradient(180deg, #0f172a 0%, #0c1423 100%);
+            color: #94a3b8;
+            padding: 4rem 2rem 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+            gap: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(148,163,184,0.1);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #0369a1, #0c4a6e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .footer-brand-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .footer-brand-tagline {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .footer-description {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin: 0 0 1.5rem;
+            color: #94a3b8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(148,163,184,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: rgba(59,130,246,0.2);
+            color: #60a5fa;
+            transform: translateY(-3px) rotate(5deg);
+        }
+
+        .footer-heading {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin: 0 0 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #f1f5f9;
+        }
+
+        .footer-contact-item {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1.5rem 1rem 3rem;
+            }
+
+            .welcome-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subjects-section {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .quick-action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-container">
+        <a href="/" class="logo-link">
+            <div class="logo-icon">AL</div>
+            <div>
+                <div class="logo-text">ALHORIZON</div>
+                <div class="logo-subtitle">Student Portal</div>
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a th:href="@{/}" class="nav-link ">Home</a>
+            <a href="/student/dashboard" class="nav-link active">Dashboard</a>
+            <a th:href="@{/papers/stream}" class="nav-link ">Papers</a>
+            <a th:href="@{/about}" class="nav-link">About</a>
+            <a th:href="@{/support}" class="nav-link">Support</a>
+        </div>
+
+        <div class="nav-actions">
+            <div class="user-profile">
+                <div class="user-avatar">S</div>
+                <div class="user-info">
+                    <div class="user-name">Student Name</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="handleLogout()">⎋ Logout</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Dashboard Content -->
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <div class="welcome-badge">
+                <span class="welcome-badge-dot"></span>
+                <span class="welcome-badge-text">Student Dashboard</span>
+            </div>
+            <h1 class="welcome-title">Welcome back, Student!</h1>
+            <p class="welcome-subtitle">
+                Quickly access your subjects, recent papers and upcoming exams.
+            </p>
+            <div class="quick-actions">
+
+                <a href="/papers/stream" class="quick-action-btn secondary">
+                    📄 View All Papers
+                </a>
+                <a href="/student/profile" class="quick-action-btn secondary">
+                    👤 My Profile
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon blue">📚</div>
+            <div class="stat-label">Subjects</div>
+            <div class="stat-value">6</div>
+            <p class="stat-note">You're enrolled in these subjects</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">📄</div>
+            <div class="stat-label">Recent Papers</div>
+            <div class="stat-value">12</div>
+            <p class="stat-note">Last uploads for revision</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon orange">📅</div>
+            <div class="stat-label">Upcoming Exams</div>
+            <div class="stat-value">3</div>
+            <p class="stat-note">Check dates and plan revision</p>
+        </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+        <!-- Recent Papers -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">Recent Papers</h2>
+                <a href="/papers/stream" class="view-all-link">View all →</a>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">Physics</td>
+                        <td>2025-02-15</td>
+                        <td><span class="badge badge-success">Open</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Chemistry</td>
+                        <td>2025-02-20</td>
+                        <td><span class="badge badge-success">Open</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Biology</td>
+                        <td>2025-02-25</td>
+                        <td><span class="badge badge-warning">Pending</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subjects and Notifications -->
+    <div class="subjects-section">
+        <!-- Your Subjects -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">Your Subjects</h2>
+            </div>
+            <div class="subject-chips">
+                <div class="chip" onclick="window.location='/subjects/1'">
+                    <span>📐</span>
+                    <span>Mathematics</span>
+                </div>
+                <div class="chip" onclick="window.location='/subjects/2'">
+                    <span>⚗️</span>
+                    <span>Chemistry</span>
+                </div>
+                <div class="chip" onclick="window.location='/subjects/3'">
+                    <span>⚡</span>
+                    <span>Physics</span>
+                </div>
+                <div class="chip" onclick="window.location='/subjects/4'">
+                    <span>🧬</span>
+                    <span>Biology</span>
+                </div>
+                <div class="chip" onclick="window.location='/subjects/5'">
+                    <span>💻</span>
+                    <span>ICT</span>
+                </div>
+                <div class="chip" onclick="window.location='/subjects/6'">
+                    <span>🌍</span>
+                    <span>Geography</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">Notifications</h2>
+                <span class="badge badge-info">3 New</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-title">New Physics Paper Uploaded</div>
+                    <div class="timeline-text">Your teacher uploaded a new past paper for Physics.</div>
+                    <div class="timeline-meta">2 hours ago</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-title">Exam Schedule Updated</div>
+                    <div class="timeline-text">Chemistry exam date has been changed to Feb 20.</div>
+                    <div class="timeline-meta">1 day ago</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-title">New Marking Scheme Available</div>
+                    <div class="timeline-text">Biology marking scheme for Term Test 1 is now available.</div>
+                    <div class="timeline-meta">2 days ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Tips Card -->
+    <div class="content-card" style="animation-delay: 0.6s;">
+        <div class="card-header">
+            <h2 class="card-title">📖 Study Tips</h2>
+        </div>
+        <p style="color: #64748b; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+            Use past papers to time yourself under exam conditions. After each attempt,
+            compare with the marking scheme and note where you lost marks.
+        </p>
+        <ul style="color: #64748b; font-size: 0.9rem; line-height: 1.8; padding-left: 1.5rem;">
+            <li>Start with subjects that have nearer exam dates.</li>
+            <li>Keep track of which papers you've already completed.</li>
+            <li>Discuss difficult questions with your teachers and friends.</li>
+            <li>Review marking schemes to understand examiner expectations.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-grid">
+            <!-- Company Info -->
+            <div>
+                <div class="footer-brand">
+                    <div class="footer-logo-icon">AL</div>
+                    <div>
+                        <div class="footer-brand-name">ALHORIZON</div>
+                        <div class="footer-brand-tagline">Paper Management System</div>
+                    </div>
+                </div>
+                <p class="footer-description">
+                    Empowering educational institutions with advanced digital tools for examination management, paper organization, and academic excellence.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="footer-heading">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/" class="footer-link">Home</a></li>
+                    <li><a href="/papers" class="footer-link">Browse Papers</a></li>
+                    <li><a href="/exams" class="footer-link">Examinations</a></li>
+                    <li><a href="/subjects" class="footer-link">Subjects</a></li>
+                    <li><a href="/about" class="footer-link">About Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div>
+                <h4 class="footer-heading">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="/help" class="footer-link">Help Center</a></li>
+                    <li><a href="/documentation" class="footer-link">Documentation</a></li>
+                    <li><a href="/tutorials" class="footer-link">Tutorials</a></li>
+                    <li><a href="/faq" class="footer-link">FAQs</a></li>
+                    <li><a href="/support" class="footer-link">Support</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div>
+                <h4 class="footer-heading">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="/terms" class="footer-link">Terms of Service</a></li>
+                    <li><a href="/cookies" class="footer-link">Cookie Policy</a></li>
+                    <li><a href="/gdpr" class="footer-link">GDPR</a></li>
+                    <li><a href="/license" class="footer-link">Licenses</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h4 class="footer-heading">Contact Us</h4>
+                <ul class="footer-links">
+                    <li class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        <span style="font-size: 0.85rem; line-height: 1.6;">
+                            123 Education Street<br>
+                            Colombo, Sri Lanka
+                        </span>
+                    </li>
+                    <li class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <a href="tel:+94112345678" class="footer-link">+94 11 234 5678</a>
+                    </li>
+                    <li class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <a href="mailto:info@alpaper.edu.lk" class="footer-link">info@alpaper.edu.lk</a>
+                    </li>
+                    <li class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <span style="font-size: 0.85rem;">Mon - Fri: 8:00 AM - 5:00 PM</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                © 2025 AL Paper Management System. All rights reserved.
+            </p>
+            <div class="footer-bottom-links">
+                <a href="/sitemap" class="footer-link" style="font-size: 0.85rem;">Sitemap</a>
+                <a href="/accessibility" class="footer-link" style="font-size: 0.85rem;">Accessibility</a>
+                <a href="/status" class="footer-link" style="font-size: 0.85rem;">System Status</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Handle Logout
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = '/logout';
+        }
+    }
+
+    // Animate stats on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const statValues = document.querySelectorAll('.stat-value');
+
+        statValues.forEach(stat => {
+            const target = parseInt(stat.textContent);
+            let current = 0;
+            const increment = target / 50;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    stat.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current);
+                }
+            }, 30);
+        });
+
+        // Add hover animations to cards
+        const cards = document.querySelectorAll('.stat-card, .content-card, .chip');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add notification badge pulse animation
+        const notificationBadge = document.querySelector('.card-header .badge-info');
+        if (notificationBadge) {
+            setInterval(() => {
+                notificationBadge.style.animation = 'pulse 1s ease';
+                setTimeout(() => {
+                    notificationBadge.style.animation = '';
+                }, 1000);
+            }, 3000);
+        }
+    });
+</script>
+
+</body>
+</html>
