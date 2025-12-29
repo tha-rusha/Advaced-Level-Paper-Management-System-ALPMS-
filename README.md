@@ -402,15 +402,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 📞 Contact & Support
-
-- 🐛 **Report bugs**: [Open an issue](https://github.com/tha-rusha/Advaced-Level-Paper-Management-System-ALPMS-/issues)
-- 💡 **Feature requests**: [Create a feature request](https://github.com/tha-rusha/Advaced-Level-Paper-Management-System-ALPMS-/issues)
-- 📧 **Email**: support@alpms.com
-- 🌐 **Website**: [ALPMS Official](https://alpms.com)
-
----
-
 ## ⭐ Show Your Support
 
 Give a ⭐️ if this project helped you!
